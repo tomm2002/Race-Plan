@@ -1,4 +1,3 @@
-// src/components/UploadGPS.jsx
 import { useState } from "react";
 import api from "../api"; // Ensure the API path is correct
 
@@ -7,6 +6,7 @@ function UploadGPS() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [fileUrl, setFileUrl] = useState(''); // State to store file URL
 
     const handleFileChange = (e) => {
         setGpsFile(e.target.files[0]);
@@ -19,7 +19,6 @@ function UploadGPS() {
             return;
         }
 
-        // Create form data to upload the file
         const formData = new FormData();
         formData.append('gpsFile', gpsFile);
 
@@ -35,6 +34,7 @@ function UploadGPS() {
             });
             console.log('File uploaded successfully:', response.data);
             setSuccess('File uploaded successfully!');
+            setFileUrl(response.data.file_url); // Store the file URL
         } catch (error) {
             console.error('Error uploading file:', error);
             setError('Error uploading file: ' + (error.response?.data?.message || error.message));
@@ -64,6 +64,12 @@ function UploadGPS() {
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             {success && <p style={{ color: 'green' }}>{success}</p>}
+            {fileUrl && (
+                <div>
+                    <p>File URL:</p>
+                    <a href={fileUrl} target="_blank" rel="noopener noreferrer">{fileUrl}</a>
+                </div>
+            )}
         </div>
     );
 }

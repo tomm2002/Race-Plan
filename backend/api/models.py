@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 class GPSFile(models.Model):
-    file = models.FileField(upload_to='gps_files/') 
+    file = models.FileField(upload_to='gps_files/') #uplaod to media/gps_files
     uploaded_at = models.DateTimeField(auto_now_add=True)  
 
     def __str__(self):

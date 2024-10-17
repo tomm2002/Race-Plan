@@ -4,6 +4,7 @@ import Note from "../components/Note"
 import "../styles/Home.css"
 import FileUpload from "../components/GPSFileUpload";
 import UploadGPS from "../components/GPSFileUpload";
+import GPSFileList from "../components/GPSFileList";
 
 function Home() {
     // Other states and useEffect logic for notes or other features...
@@ -11,8 +12,9 @@ function Home() {
     return (
         <div>
             <h1>Home Page</h1>
-            <UploadGPS /> {/* Include the UploadGPS component here */}
-            {/* Other components or features like Note rendering */}
+            <UploadGPS /> {}
+            <GPSFileList /> {}
+            
         </div>
     );
 }

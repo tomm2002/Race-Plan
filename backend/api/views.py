@@ -7,21 +7,40 @@ from .models import Note
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status  
+from .models import GPSFile
 
 class GPSFileUploadView(APIView):
     def post(self, request):
         if 'gpsFile' not in request.FILES:
             return Response({'message': 'No file provided.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        gps_file = request.FILES.getlist('gpsFile')  
+        gps_file = request.FILES['gpsFile']
 
-        if not gps_file:
-            return Response({'message': 'No GPS file uploaded.'}, status=status.HTTP_400_BAD_REQUEST)
+        gps_file_instance = GPSFile(file=gps_file)
+        gps_file_instance.save()
 
-        gps_file = gps_file[0]
+        return Response({
+            'message': 'File uploaded successfully!',
+            'file_name': gps_file_instance.file.name,  # File name to display
+            'file_url': gps_file_instance.file.url,    # URL to access the uploaded file
+            'uploaded_at': gps_file_instance.uploaded_at
+        }, status=status.HTTP_201_CREATED)
 
-        print(f"Received file: {gps_file.name}")  
-        return Response({'message': 'File uploaded successfully!'}, status=status.HTTP_201_CREATED)
+from .models import GPSFile  # Import the GPSFile model
+
+class GPSFileListView(APIView):
+    def get(self, request):
+        gps_files = GPSFile.objects.all()
+        file_list = []
+
+        for gps_file in gps_files:
+            file_list.append({
+                'file_name': gps_file.file.name,
+                'file_url': gps_file.file.url,  # URL to access the uploaded file
+                'uploaded_at': gps_file.uploaded_at,
+            })
+
+        return Response(file_list, status=status.HTTP_200_OK)
 
 class NoteListCreate(generics.ListCreateAPIView):
     serializer_class = NoteSerializer
