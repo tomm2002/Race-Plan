@@ -34,3 +34,22 @@
   .form-button:hover {
     background-color: #0056b3;
   }
+
+  .file-upload-container {
+    margin: 10px 0;
+    width: 90%;
+}
+
+.file-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.file-name {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+}
