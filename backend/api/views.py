@@ -15,7 +15,7 @@ class GPSFileUploadView(APIView):
             return Response({'message': 'No file provided.'}, status=status.HTTP_400_BAD_REQUEST)
 
         gps_file = request.FILES['gpsFile']
-
+        print()
         gps_file_instance = GPSFile(file=gps_file)
         gps_file_instance.save()
 
