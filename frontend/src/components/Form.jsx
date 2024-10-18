@@ -41,7 +41,7 @@ function Form({ route, method }) {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Username"
+                placeholder="Username off yours"
             />
             <input
                 className="form-input"
