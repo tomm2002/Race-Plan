@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Note
+from .models import GPSFile
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,6 +14,11 @@ class UserSerializer(serializers.ModelSerializer):
         print(validated_data)
         user = User.objects.create_user(**validated_data)
         return user
+
+class GPSFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GPSFile
+        fields = ['file', 'uploaded_at']
 
 
 class NoteSerializer(serializers.ModelSerializer):

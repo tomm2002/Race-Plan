@@ -8,25 +8,44 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status  
 from .models import GPSFile
+from django.conf import settings
+
+import xml.etree.ElementTree as ET
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import GPSFile
+from .serializers import GPSFileSerializer
 
 class GPSFileUploadView(APIView):
     def post(self, request):
-        if 'gpsFile' not in request.FILES:
-            return Response({'message': 'No file provided.'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = GPSFileSerializer(data=request.data)
+        if serializer.is_valid():
+            gps_file = serializer.save()  # Save the file
+            full_url = f"{request.build_absolute_uri(settings.MEDIA_URL)}{gps_file.file}"
+            print("File uploaded successfully:", full_url)
+            return Response({'message': 'File uploaded successfully', 'file_url': full_url, 'uploaded_at': gps_file.uploaded_at}, status=status.HTTP_201_CREATED)
+        else:
+            print("Serializer errors:", serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        gps_file = request.FILES['gpsFile']
-        print()
-        gps_file_instance = GPSFile(file=gps_file)
-        gps_file_instance.save()
+    def extract_points(self, file_path):
+        points = []
+        try:
+            tree = ET.parse(file_path)  # Load the GPX file
+            root = tree.getroot()
+            namespace = {'gpx': 'http://www.topografix.com/GPX/1/1'}
 
-        return Response({
-            'message': 'File uploaded successfully!',
-            'file_name': gps_file_instance.file.name,  # File name to display
-            'file_url': gps_file_instance.file.url,    # URL to access the uploaded file
-            'uploaded_at': gps_file_instance.uploaded_at
-        }, status=status.HTTP_201_CREATED)
+            for trkpt in root.findall('.//gpx:trkpt', namespace):
+                lat = trkpt.get('lat')
+                lon = trkpt.get('lon')
+                ele = trkpt.find('gpx:ele', namespace).text if trkpt.find('gpx:ele', namespace) is not None else None
+                points.append({'latitude': lat, 'longitude': lon, 'elevation': ele})
+        except Exception as e:
+            print(f"Error parsing GPX file: {e}")
+        
+        return points
 
-from .models import GPSFile  # Import the GPSFile model
 
 class GPSFileListView(APIView):
     def get(self, request):

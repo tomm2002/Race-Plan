@@ -8,11 +8,12 @@ import GPSFileList from "../components/GPSFileList";
 
 function Home() {
     // Other states and useEffect logic for notes or other features...
-//<GPSFileList /> {}
+
     return (
         <div>
             <h1>Home Page</h1>
             <UploadGPS /> {}
+            <GPSFileList /> {}
             
         </div>
     );
