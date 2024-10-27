@@ -153,7 +153,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOW_ALL_ORIGINS = True #not secure, cahnge it 
 CORS_ALLOWS_CREDENTIALS = True
 
-ALLOWED_HOSTS = ['https://www.plan-race.com/', 'www.plan-race.com/', 'plan-race.com/']
+ALLOWED_HOSTS = ['https://www.plan-race.com/', 'www.plan-race.com/', 'plan-race.com/', "1276613480.dp-development-raceplan-51932-3117344176"]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
